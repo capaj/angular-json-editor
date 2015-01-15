@@ -44,6 +44,7 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
         restrict: 'E',
         transclude: true,
         scope: {
+            editor: '=',
             schema: '=',
             startval: '=',
             buttonsController: '@',
@@ -84,7 +85,6 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                 valueToResolve = scope.startval;
                 if (angular.isDefined(valueToResolve.$promise)) {
                     startValPromise = $q.when(valueToResolve.$promise);
-
                 } else {
                     startValPromise = $q.when(valueToResolve);
                 }
@@ -100,12 +100,12 @@ angular.module('angular-json-editor', []).provider('JSONEditor', function () {
                     throw new Error('json-editor: could not resolve schema data.');
                 }
 
-                scope.editor = new JSONEditor(element[0], {
+                var editor = new JSONEditor(element[0], {
                     startval: startVal,
                     schema: schema
                 });
 
-                var editor = scope.editor;
+                scope.editor = editor;
 
                 editor.on('ready', function () {
                     scope.isValid = (editor.validate().length === 0);
